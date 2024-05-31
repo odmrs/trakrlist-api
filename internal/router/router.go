@@ -1,22 +1,17 @@
 package router
 
 import (
-	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 )
 
-func Ping(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func Initialize() {
+	v1 := http.NewServeMux()
 
-	pong := map[string]string{
-		"message": "pong",
-	}
+	initializeRoutes(v1)
 
-	pongJson, err := json.Marshal(pong)
-	if err != nil {
-		fmt.Println("marshal error")
-	}
+	server := &http.Server{Addr: "localhost:8080", Handler: v1}
 
-	fmt.Fprint(w, string(pongJson))
+	log.Print("Listening...")
+	server.ListenAndServe()
 }
