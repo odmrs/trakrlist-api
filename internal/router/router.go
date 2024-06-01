@@ -17,5 +17,9 @@ func Initialize() {
 	server := &http.Server{Addr: "localhost:8080", Handler: v1}
 
 	logger.Info("Listening...")
-	server.ListenAndServe()
+	err := server.ListenAndServe()
+	if err != nil {
+		logger.Errorf("server error %v", err)
+		return
+	}
 }
