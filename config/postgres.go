@@ -15,7 +15,7 @@ const (
 	dbname   = "postgre_db"
 )
 
-func InitializePostgres() error {
+func InitializePostgres() (*sql.DB, error) {
 	logger := *GetLogger("postgres")
 
 	// Create DB connection
@@ -25,17 +25,32 @@ func InitializePostgres() error {
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		logger.Errorf("open postgres error: %v", err)
-		return err
+		return nil, err
 	}
-
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
 		logger.Errorf("ping error: %v", err)
-		return err
+		return nil, err
 	}
 
 	logger.Info("Successfully connected!")
-	return nil
+	createTableSQL := `
+  CREATE TABLE IF NOT EXISTS content (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  genres TEXT NOT NULL,
+  author TEXT NOT NULL,
+  duration INT NOT NULL
+  );`
+
+	_, err = db.Exec(createTableSQL)
+	if err != nil {
+		logger.Errorf("failed to create table: %v", err)
+		return nil, err
+	}
+
+	logger.Info("table 'content' created or already exists")
+	return db, nil
 }

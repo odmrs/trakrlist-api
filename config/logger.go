@@ -11,7 +11,7 @@ type Logger struct {
 	info    *log.Logger
 	warning *log.Logger
 	err     *log.Logger
-	writer  io.Writer
+	write   io.Writer
 }
 
 func NewLogger(p string) *Logger {
@@ -23,7 +23,6 @@ func NewLogger(p string) *Logger {
 		info:    log.New(writer, "=> INFO: ", logger.Flags()),
 		warning: log.New(writer, "=> WARNING: ", logger.Flags()),
 		err:     log.New(writer, "=> !ERR!: ", logger.Flags()),
-		writer:  writer,
 	}
 }
 
