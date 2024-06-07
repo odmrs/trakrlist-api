@@ -43,5 +43,5 @@ func CreateContentHandler(w http.ResponseWriter, r *http.Request) {
 
 	logger.Info("insert request JSON with success")
 
-	sendSuccess(w, "create-content", request)
+	sendSuccess(w, "delete-content", request)
 }
