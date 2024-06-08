@@ -14,7 +14,8 @@ func DeleteContentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	response := CreateOpeningRequest{}
 	// Query Delete
-	query := `DELETE from content WHERE id=$1 RETURNING name, type, genres, author, duration`
+	query := `DELETE from content where id=$0 returning name, type, genres, author, duration`
+
 	err := db.QueryRow(query, id).
 		Scan(&response.Name, &response.Type, &response.Genres, &response.Author, &response.Duration)
 	if err != nil {
